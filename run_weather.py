@@ -43,7 +43,7 @@ class baselineLSTM(nn.Module):
         x, (h_n, c_n)  = self.rnn(x,(self.h0,self.c0))
 
         # take all outputs
-        out = self.lin(x[:, :, :])
+        out = self.lin(x[:, -1, :])
 
         return out
 
@@ -111,9 +111,8 @@ def train_model(model,save_filepath,training_loader,validation_loader,epochs,dev
     I'd recommend switching the loss function to nn.CrossEntropyLoss(), but this 
     is also something that can be changed if you feel a better loss function would work
     """
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-#     loss_func = nn.MSELoss()
-#     loss_func = nn.L1Loss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    #loss_func = nn.MSELoss()
     loss_func = nn.CrossEntropyLoss()
     decay_rate = 0.93 #decay the lr each step to 93% of previous lr
     lr_sch = torch.optim.lr_scheduler.ExponentialLR(optimizer=optimizer, gamma=decay_rate)
